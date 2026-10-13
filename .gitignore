@@ -1,0 +1,7 @@
+node_modules/
+mobile/kmp/.gradle/
+mobile/kmp/.kotlin/
+mobile/kmp/build/
+
+/.scriptorium/sbom/
+dist/

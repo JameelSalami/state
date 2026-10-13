@@ -1,0 +1,142 @@
+{
+  "schema": "foundation-hashes.golden/v1",
+  "createdAgainst": {
+    "contract": "2543cf7",
+    "state": "83a57ff",
+    "trace": "3bbd89e"
+  },
+  "json": [
+    {
+      "name": "empty",
+      "value": {},
+      "contract": {
+        "_tag": "Digest",
+        "digest": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      },
+      "state": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "trace": "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "name": "ordered",
+      "value": {
+        "b": 2,
+        "a": 1
+      },
+      "contract": {
+        "_tag": "Digest",
+        "digest": "sha256:43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777"
+      },
+      "state": "sha256:43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777",
+      "trace": "sha256:43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777"
+    },
+    {
+      "name": "unicode",
+      "value": {
+        "title": "Crème 🍕 日本語",
+        "n": 3.25
+      },
+      "contract": {
+        "_tag": "Digest",
+        "digest": "sha256:ce1ef8be7e29514adbc07af3c4ed929192f3cbf326ead4862ae280d4763a34e7"
+      },
+      "state": "sha256:ce1ef8be7e29514adbc07af3c4ed929192f3cbf326ead4862ae280d4763a34e7",
+      "trace": "sha256:ce1ef8be7e29514adbc07af3c4ed929192f3cbf326ead4862ae280d4763a34e7"
+    },
+    {
+      "name": "array",
+      "value": [
+        {
+          "a": true
+        },
+        null,
+        0,
+        0,
+        "newline\nend"
+      ],
+      "contract": {
+        "_tag": "Digest",
+        "digest": "sha256:ccdfdfd8c8aa86ec7050b7d5f83711ac6a2dd591d8c7ef5aa08c152a0caa1663"
+      },
+      "state": "sha256:ccdfdfd8c8aa86ec7050b7d5f83711ac6a2dd591d8c7ef5aa08c152a0caa1663",
+      "trace": "sha256:ccdfdfd8c8aa86ec7050b7d5f83711ac6a2dd591d8c7ef5aa08c152a0caa1663"
+    },
+    {
+      "name": "number",
+      "value": {
+        "float": 1.23e-8,
+        "safe": 9007199254740991
+      },
+      "contract": {
+        "_tag": "Digest",
+        "digest": "sha256:c53d9e64f9d0a1a6fb4d37029a2438155dab58ff438f8e69ad4c013cc2adc50c"
+      },
+      "state": "sha256:c53d9e64f9d0a1a6fb4d37029a2438155dab58ff438f8e69ad4c013cc2adc50c",
+      "trace": "sha256:c53d9e64f9d0a1a6fb4d37029a2438155dab58ff438f8e69ad4c013cc2adc50c"
+    },
+    {
+      "name": "escaping",
+      "value": {
+        "\\": " \t",
+        "quote": "\""
+      },
+      "contract": {
+        "_tag": "Digest",
+        "digest": "sha256:3e90c2e8047ff7472a66c395c767be2c0b1eb03e7093eb72102618b33b3639ed"
+      },
+      "state": "sha256:3e90c2e8047ff7472a66c395c767be2c0b1eb03e7093eb72102618b33b3639ed",
+      "trace": "sha256:3e90c2e8047ff7472a66c395c767be2c0b1eb03e7093eb72102618b33b3639ed"
+    }
+  ],
+  "text": [
+    {
+      "value": "",
+      "contract": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "expectedNodeCrypto": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "value": "hello world",
+      "contract": "sha256:b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9",
+      "expectedNodeCrypto": "sha256:b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9"
+    },
+    {
+      "value": "𝄞 Café 😀\n",
+      "contract": "sha256:d1a6e1bd7eff508e9443d15702de2f09459dc7c761c14fd114072fb901c56b06",
+      "expectedNodeCrypto": "sha256:d1a6e1bd7eff508e9443d15702de2f09459dc7c761c14fd114072fb901c56b06"
+    },
+    {
+      "value": "a\ud800",
+      "contract": "sha256:51d277510ba4bf97b25f12d38513c1b620a2a33fc83b3beeeb0dd971bf429e6d",
+      "expectedNodeCrypto": "sha256:51d277510ba4bf97b25f12d38513c1b620a2a33fc83b3beeeb0dd971bf429e6d"
+    },
+    {
+      "value": "binary-not-text",
+      "contract": "sha256:70a151cb73bbbdf71373e591d15ff0705a1db993c9fe59da71b93b9dbb2fa702",
+      "expectedNodeCrypto": "sha256:70a151cb73bbbdf71373e591d15ff0705a1db993c9fe59da71b93b9dbb2fa702"
+    }
+  ],
+  "bytes": [
+    {
+      "data": [],
+      "contract": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "data": [
+        0,
+        255,
+        128,
+        52,
+        0,
+        10
+      ],
+      "contract": "sha256:00115d37017ad1002fe416d5aa17f4cadfe58d31771ccae9df10c3deb2a38ce4"
+    },
+    {
+      "data": [
+        97,
+        98,
+        99
+      ],
+      "contract": "sha256:ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    }
+  ]
+}
