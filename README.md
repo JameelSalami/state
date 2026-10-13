@@ -348,3 +348,26 @@ binaries requires platform-specific attribution and verification. No third-party
 library sources are bundled inside the State npm tarball. Rights to the
 State source and any inherited NOTICE obligations remain subject to
 provenance confirmation before public distribution.
+
+
+## Opt-in disjoint writes and explicit history checkpointing
+
+`commitDisjointStateChanges(store, { expected, records, deleteIds, compiler,
+sourceDigest })` rebases changes to disjoint record IDs onto newer versions,
+retrying the original strict whole-store CAS atomically. A conflicting write
+to a touched record ID still fails. This is an application-level optimistic
+rebase, not physical per-record transactions: each commit still creates a
+complete immutable StateMap.
+
+`prepareStateCheckpoint(store)` verifies full history and prepares a
+single-generation equivalent of **current materialized state**. It does not
+change the live store. A consumer can explicitly authorize the existing
+`replaceNodeSqliteDatabaseFromSnapshot` mechanism after stopping live writers,
+backing up the original database and retaining any historically important
+receipts externally. The new checkpoint has a **different current digest
+and history identity**; historical references cannot be silently retained.
+
+The SQLite integration test demonstrates 12 historical StateMaps becoming
+one checkpoint StateMap without changing the current logical record.
+This is opt-in history discarding, **not** a replacement for persistent
+structural sharing or a way to retain all history without paying storage costs.

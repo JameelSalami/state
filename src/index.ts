@@ -6,3 +6,5 @@ export * from "./adapters/memory.js";
 export * from "./snapshot.js";
 export * from "./stdio-protocol.js";
 export * from "./implementation.js";
+export * from "./disjoint.js";
+export * from "./checkpoint.js";
