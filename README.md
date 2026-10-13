@@ -1,9 +1,7 @@
 # State
 
-> **Unpublished independent release candidate.** Package identity:
-> `@durable-systems/state@0.1.0` on the `jameelsalami/state` GitHub path.
-> The scoped npm name is not yet published or verified for namespace access.
-> Both `private: true` and the final public-release authorization gate remain in place.
+> Public npm package: `@durable-systems/state@0.1.0`.
+> GitHub: [JameelSalami/state](https://github.com/JameelSalami/state).
 
 
 State is the shared persistence/materialization substrate for consumer-owned state.
@@ -230,9 +228,8 @@ optional Node SQLite adapter and CLI require a Node version providing
 `node:sqlite`**, verified here on Node 22. Their experimental SQLite
 implementation does not qualify mobile Android/iOS distribution.
 
-Apache-2.0 terms are staged in [LICENSE](LICENSE), subject to confirmation
-of original ownership, source provenance, and any inherited NOTICE obligations.
-`private: true` remains until explicit publication authorization.
+Licensed under Apache-2.0; see [LICENSE](LICENSE). Consumers and
+redistributors must honor applicable attribution and NOTICE obligations.
 
 ## Portable JavaScript core and implementation binding
 

@@ -11,8 +11,8 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const name = "@durable-systems/state";
 const info = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
-if (info.name !== name || info.version !== "0.1.0" || info.private !== true) {
-  throw Error("unexpected State source identity or safety flag");
+if (info.name !== name || info.version !== "0.1.0" || info.private === true) {
+  throw Error("unexpected State 0.1.0 public release identity");
 }
 const scratch = mkdtempSync(join(tmpdir(), "state-independent-consumer-"));
 let completed = false;
