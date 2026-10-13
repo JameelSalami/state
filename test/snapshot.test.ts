@@ -11,6 +11,8 @@ import {
   makePointer,
   makeRecord,
   makeStateMap,
+  mapDigest,
+  canonicalJson,
   restoreStateRuntimeSnapshotToEmpty,
   semanticDigest
 } from "../src/index.js";
@@ -208,4 +210,91 @@ test("snapshot replacement rebases active SQLite history without retained forgot
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+
+test("restore-to-empty refuses nonempty target before importing any source bytes", async () => {
+  const source = await Effect.runPromise(makeMemoryStateStore("assistant"));
+  await seedStore(source);
+  const exported = await Effect.runPromise(exportStateRuntimeSnapshot(source));
+
+  const target = await Effect.runPromise(makeMemoryStateStore("assistant"));
+  const original = makeRecord("assistant", "target-only", "kind", { value: "keep" });
+  const record = await Effect.runPromise(target.putRecord(original));
+  const existingMap = makeStateMap({
+    project: "assistant", generation: 0, parent: null,
+    compiler: "test-preoccupied", sourceDigest: semanticDigest({ occupied: true }),
+    entries: { [original.id]: { kind: original.kind, record } }
+  });
+  const existingDigest = await Effect.runPromise(target.putMap(existingMap));
+  const existing = makePointer("assistant", 0, existingDigest);
+  await Effect.runPromise(target.compareAndSwapCurrent(null, existing));
+
+  const exit = await Effect.runPromiseExit(restoreStateRuntimeSnapshotToEmpty(target, exported));
+  assert.equal(exit._tag, "Failure");
+  assert.deepEqual(await Effect.runPromise(target.current), existing);
+  // A failed restore must not import records or maps into the occupied store.
+  const unseen = exported.payload.maps.find(entry => entry.digest !== existingDigest)!;
+  const imported = await Effect.runPromise(Effect.either(target.getMap(unseen.digest)));
+  assert.equal(imported._tag, "Left");
+  assert.equal((await Effect.runPromise(target.verifyHistory)).generation, 0);
+  await Effect.runPromise(source.close);
+  await Effect.runPromise(target.close);
+});
+
+test("snapshot with a generation gap is refused before writing immutable maps", async () => {
+  const genesis = makeStateMap({
+    project: "assistant", generation: 0, parent: null,
+    compiler: "gap-test", sourceDigest: semanticDigest({ version: 0 }), entries: {}
+  });
+  const baseDigest = mapDigest(genesis);
+  const jumped = makeStateMap({
+    project: "assistant", generation: 2, parent: baseDigest,
+    compiler: "gap-test", sourceDigest: semanticDigest({ version: 2 }), entries: {}
+  });
+  const jumpDigest = mapDigest(jumped);
+  const payload = {
+    current: makePointer("assistant", 2, jumpDigest),
+    records: [],
+    maps: [
+      { digest: baseDigest, canonicalJson: canonicalJson(genesis as never) },
+      { digest: jumpDigest, canonicalJson: canonicalJson(jumped as never) }
+    ].sort((a,b) => a.digest.localeCompare(b.digest))
+  };
+  const forged = {
+    schema: "state-runtime.snapshot/v1" as const,
+    project: "assistant",
+    payload,
+    payloadDigest: semanticDigest(payload as never)
+  };
+  const target = await Effect.runPromise(makeMemoryStateStore("assistant"));
+  const outcome = await Effect.runPromise(
+    Effect.either(restoreStateRuntimeSnapshotToEmpty(target, forged))
+  );
+  assert.equal(outcome._tag, "Left");
+  if (outcome._tag === "Left") {
+    // Snapshot validation must name a generation gap rather than relying on
+    // later traversal/install checks to reject the malformed history.
+    assert.match(String(outcome.left), /snapshot StateMap generations are not continuous/);
+  }
+  assert.deepEqual(await Effect.runPromise(target.current), null);
+  // Guard must run BEFORE putMap writes anything (not merely reject installation).
+  const uploaded = await Effect.runPromise(Effect.either(target.getMap(jumpDigest)));
+  assert.equal(uploaded._tag, "Left");
+  const root = await Effect.runPromise(Effect.either(target.getMap(baseDigest)));
+  assert.equal(root._tag, "Left");
+  await Effect.runPromise(target.close);
+});
+
+
+test("installVerifiedHistory refuses a preoccupied memory store, even for an existing valid pointer", async () => {
+  const target = await Effect.runPromise(makeMemoryStateStore("assistant"));
+  const existing = await seedStore(target);
+  const outcome = await Effect.runPromise(Effect.either(target.installVerifiedHistory(existing)));
+  assert.equal(outcome._tag, "Left", "only an EMPTY target may install historical state");
+  if (outcome._tag === "Left") {
+    assert.match(String(outcome.left), /verified history installation requires an empty target store/);
+  }
+  assert.deepEqual(await Effect.runPromise(target.current), existing);
+  await Effect.runPromise(target.close);
 });
